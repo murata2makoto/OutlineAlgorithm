@@ -1,6 +1,6 @@
-# OutLineAlgorithm
+# OutlineAlgorithm
 
-OutLineAlgorithm is an F# library designed to parse sequences of tokens and parentheses into hierarchical structures such as trees (`Tree`) and hedges (`Hedge`). This library is particularly useful for processing documents with deeply nested structures, such as HTML or OOXML documents.
+OutlineAlgorithm is an F# library designed to parse sequences of tokens and parentheses into hierarchical structures such as trees (`Tree`) and hedges (`Hedge`). This library is particularly useful for processing documents with deeply nested structures, such as HTML or OOXML documents.
 
 ## Features
 
@@ -26,7 +26,7 @@ The following example demonstrates how to use the library in C# to process a seq
 ~~~
 using System;
 using System.Collections.Generic;
-using OutLineAlgorithm.Interop;
+using OutlineAlgorithm.Interop;
 class Program { static void Main() {
     // Input sequence var input = new List<string> { "H1", "H2", "H4", "H3" };
     // Rank function
@@ -74,8 +74,8 @@ static void PrintTree<T>(InteropTree<T> tree, int level)
 
 The following example demonstrates how to use the library in F# to process a sequence of tokens and construct a tree structure:
 ~~~
-open OutLineAlgorithm.CreateTokenOrParenthesisSeq
-open OutLineAlgorithm.CreateHedge
+open OutlineAlgorithm.CreateTokenOrParenthesisSeq
+open OutlineAlgorithm.CreateHedge
 let input = [ "H1"; "H2"; "H4"; "H3" ]
 let getRank element =
   match element with | "H1" -> 1 | "H2" -> 2 | "H3" -> 2 | "H4" -> 4 | _ -> 0
@@ -96,14 +96,14 @@ This project is written in F#. To set it up, follow these steps:
 
 ## Applications
 
-OutLineAlgorithm is particularly useful for:
+OutlineAlgorithm is particularly useful for:
 - Parsing and processing hierarchical document formats like HTML and OOXML.
 - Generating tree structures for syntax analysis or document outlining.
 - Handling cases where the hierarchy deepens significantly, ensuring structural consistency.
 
 ## Contributing
 
-Contributions are welcome! If you encounter any issues or have feature requests, please open an [issue](https://github.com/your-username/OutLineAlgorithm/issues). Pull requests are also appreciated.
+Contributions are welcome! If you encounter any issues or have feature requests, please open an [issue](https://github.com/your-username/OutlineAlgorithm/issues). Pull requests are also appreciated.
 
 ## License
 
