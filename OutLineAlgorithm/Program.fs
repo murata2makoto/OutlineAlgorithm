@@ -1,4 +1,5 @@
-﻿open TokenOrParenthesis
+﻿module OutlineAlgorithm.Main
+open TokenOrParenthesis
 open CreateTokenOrParenthesisSeq
 open TreeAndHedge
 open CreateHedge
@@ -14,6 +15,7 @@ let main argv =
             | StartParenthesis -> printf "("
             | EndParenthesis -> printf ")"
             | Token(e) -> printf "%A" e
+            | DummyToken -> printf "@"
         printfn ""
         let hedge, _ = sequence2Hedge tpSeq
         for tr in hedge do
@@ -33,4 +35,8 @@ let main argv =
     seq {1;2;3;4;5;1;2} |> test 
     seq {1;2;3;4;3;4;3;4;3;4;1;2} |> test 
     seq {1;2;3;4;2;3;4;2;3;1} |> test 
+    seq {2} |> test 
+    seq {4} |> test 
+    seq {1;2;4} |> test
+    seq {1;2;4;3} |> test
     1

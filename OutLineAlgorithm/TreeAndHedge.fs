@@ -1,8 +1,19 @@
-﻿module TreeAndHedge
+﻿module OutlineAlgorithm.TreeAndHedge
 
-type Tree<'a> = Node of 'a * Hedge<'a>
-and Hedge<'a> = Tree<'a> seq;;
+/// <summary>
+/// Represents a tree structure where each node contains an optional value and a sequence of child trees (hedge).
+/// </summary>
+/// <typeparam name="T">The type of the value stored in the tree nodes.</typeparam>
+type Tree<'a> = 
+    /// <summary>
+    /// A node in the tree containing an optional value and a sequence of child trees.
+    /// </summary>
+    /// <param name="value">The optional value stored in the node.</param>
+    /// <param name="children">The sequence of child trees (hedge) associated with the node.</param>
+    Node of 'a option * Hedge<'a>
 
-//木の列のほうがプログラミングでは便利なことが多いし、
-//数学的にも扱いやすい。なお、二分木のように子の数が
-//決まっている場合ではなく、子の数が不定な場合の話である。
+/// <summary>
+/// Represents a hedge, which is a sequence of trees.
+/// </summary>
+/// <typeparam name="T">The type of the value stored in the tree nodes within the hedge.</typeparam>
+and Hedge<'a> = Tree<'a> seq
