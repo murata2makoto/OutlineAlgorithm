@@ -1,6 +1,13 @@
 # OutlineAlgorithm
 
-OutlineAlgorithm is an F# library designed to parse sequences of tokens and parentheses into hierarchical structures such as trees (`Tree`) and hedges (`Hedge`). This library is particularly useful for processing documents with deeply nested structures, such as HTML or OOXML documents.
+OutlineAlgorithm is an F# library designed to process a sequence of headings (e.g., h1, h2, h3) with explicit nesting levels into a hierarchical tree structure. The library operates in two stages:
+
+1. **Token and Parenthesis Generation**: The input sequence of headings is first converted into a sequence of tokens and parentheses. This intermediate representation captures the nesting structure of the headings.
+2. **Tree Construction**: The sequence of tokens and parentheses is then parsed to construct a hierarchical tree structure.
+
+This two-step process allows the library to handle cases where the nesting levels change abruptly, such as skipping levels (e.g., from h2 to h4) or returning to a shallower level.
+
+The library is particularly useful for processing documents with deeply nested structures, such as HTML or OOXML documents.
 
 ## Features
 
