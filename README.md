@@ -11,7 +11,7 @@ The library is particularly useful for processing documents with deeply nested s
 
 ## Features
 
-- **Token and Parenthesis Parsing**: Converts a sequence of tokens and parentheses into a structured tree or hedge.
+- **Token and Parenthesis Parsing**: Converts a sequence of tokens and parentheses into a structured tree.
 - **Handles Deep Nesting**: Automatically inserts dummy tokens (`DummyToken`) to handle cases where the hierarchy deepens significantly (e.g., jumping from level H2 to H4).
 - **Inspired by Lisp's `read` Function**: Implements functionality similar to Lisp's `read` function, which parses S-expressions into tree-like structures.
 
@@ -21,7 +21,7 @@ The library is particularly useful for processing documents with deeply nested s
 Generates a sequence of tokens and parentheses based on an input sequence and a ranking function. This function ensures that the nesting structure is maintained, even when the hierarchy deepens significantly.
 
 ### 2. `nest` and `sequence2Hedge`
-These functions recursively process a sequence of tokens and parentheses to construct a tree (`Tree`) or a hedge (`Hedge`). They are conceptually similar to Lisp's `read` function for parsing S-expressions.
+These functions recursively process a sequence of tokens and parentheses to construct a tree (`Tree`) or a hedge (`Hedge`), which is a sequence of trees. These functions are conceptually similar to Lisp's `read` function for parsing S-expressions.
 
 ## Example Usage
 
