@@ -7,8 +7,32 @@ open OutlineAlgorithm.CreateHedge
 open OutlineAlgorithm.CreateTokenOrParenthesisSeq
 
 type InteropTree<'a>(value: 'a option, children: seq<InteropTree<'a>>) =
+    /// <summary>
+    /// Gets the value of the node if it exists, or the default value of the type <typeparamref name="'a"/> if the value is None.
+    /// </summary>
+    /// <value>
+    /// The value of the node if it exists; otherwise, the default value of type <typeparamref name="'a"/>.
+    /// </value>
     member _.Value = value
+
+    /// <summary>
+    /// Gets the child nodes of the current node.
+    /// </summary>
+    /// <value>
+    /// A sequence of child nodes.
+    /// </value>
     member _.Children = children
+
+    /// <summary>
+    /// Gets the value of the node if it exists, or the default value of the type <typeparamref name="'a"/> if the value is None.
+    /// </summary>
+    /// <value>
+    /// The value of the node if it exists; otherwise, the default value of type <typeparamref name="'a"/>.
+    /// </value>
+    member _.ValueOrDefault =
+        match value with
+        | Some v -> v
+        | None -> Unchecked.defaultof<'a>
 
 type Interop =
     /// <summary>

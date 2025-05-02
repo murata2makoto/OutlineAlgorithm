@@ -3,6 +3,7 @@ open TokenOrParenthesis
 open CreateTokenOrParenthesisSeq
 open TreeAndHedge
 open CreateHedge
+open OutlineIndex
       
 [<EntryPoint>]
 let main argv =
@@ -20,6 +21,7 @@ let main argv =
         let hedge, _ = sequence2Hedge tpSeq
         for tr in hedge do
             printfn "%A" tr
+        visitHedge hedge [] (fun label oi -> printfn "Visiting %d at %A" label oi)
         printfn ""
     seq {1} |> test 
     seq {1;1} |> test 

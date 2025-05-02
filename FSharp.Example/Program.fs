@@ -4,7 +4,7 @@ open OutlineAlgorithm.Interop
 [<EntryPoint>]
 let main argv =
     // Input sequence
-    let input = ["H1"; "H2"; "H4"; "H3"]
+    let input = ["H1"; "H2"; "H5"; "H3"; "H6"]
 
     // Rank function
     let getRank (element: string) =
@@ -13,6 +13,8 @@ let main argv =
         | "H2" -> 2
         | "H3" -> 3
         | "H4" -> 4
+        | "H5" -> 5
+        | "H6" -> 6
         | _ -> 0
 
     // Convert F# function to System.Func
