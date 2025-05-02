@@ -201,8 +201,8 @@ This project is written in F#. To set it up, follow these steps:
 
 ## Contributing
 
-Contributions are welcome! If you encounter any issues or have feature requests, please open an [issue](https://github.com/your-username/OutlineAlgorithm/issues). Pull requests are also appreciated.
+Contributions are welcome! If you encounter any issues or have feature requests, please open an [issue](https://github.com/murata2makoto/OutlineAlgorithm/issues). Pull requests are also appreciated.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE.txt) file for details.
