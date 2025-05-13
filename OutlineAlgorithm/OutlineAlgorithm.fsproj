@@ -9,6 +9,12 @@
     <FsDocsLicenseLink>https://opensource.org/licenses/MIT</FsDocsLicenseLink>
     <FsDocsReleaseNotesLink>https://github.com/murata2makoto/OutlineAlgorithm/releases</FsDocsReleaseNotesLink>
     <RepositoryUrl>https://github.com/murata2makoto/OutlineAlgorithm</RepositoryUrl>
+    <RepositoryBranch>...</RepositoryBranch>
+    <RepositoryType>git</RepositoryType>
+
+	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+
+	  <FsDocsBaseUrl>/</FsDocsBaseUrl>
   </PropertyGroup>
 
 
