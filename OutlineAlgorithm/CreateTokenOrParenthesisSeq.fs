@@ -1,4 +1,4 @@
-﻿module OutlineAlgorithm.CreateTokenOrParenthesisSeq
+﻿module internal OutlineAlgorithm.CreateTokenOrParenthesisSeq
 
 open TokenOrParenthesis
 

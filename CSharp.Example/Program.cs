@@ -1,16 +1,16 @@
-﻿using Microsoft.FSharp.Core;
-using OutlineAlgorithm.Interop;
+﻿using OutlineAlgorithm.Interop;
 using System;
+using System.Collections.Generic;
 
 class Program
 {
     static void Main()
     {
-        // Input sequence
-        var input = new List<string> { "H1", "H2", "H5", "H3", "H6" };
+        // Input outline headings
+        var input = new List<string> { "H1", "H2", "H4", "H3", "H5", "H3", "H5" };
 
-        // Rank function
-        Func<string, int> getRank = element => element switch
+        // Rank function mapping heading to numeric depth
+        int GetRank(string h) => h switch
         {
             "H1" => 1,
             "H2" => 2,
@@ -21,34 +21,26 @@ class Program
             _ => 0
         };
 
-        // Generate token and parenthesis sequence
-        var tokenSeq = Interop.CreateTokenOrParenthesisSeq(input, getRank);
+        // Step 1: Convert input to token stream
+        var tokens = InteropCSharp.CreateTokenOrParenthesisSeq(input, new Func<string, int>(GetRank));
+        Console.WriteLine("=== Tokens ===");
+        foreach (var token in tokens)
+            Console.WriteLine($"{token}");
 
-        // Parse to tree
-        var trees = Interop.ParseToTree(tokenSeq); // ParseToTree returns an array of InteropTree<T>
+        // Step 2: Parse tokens into tree structure
+        var tree = InteropCSharp.ParseToTree(tokens);
 
-        // Print each tree in the array
-        foreach (var tree in trees)
-        {
-            PrintTree(tree, 0);
-        }
-    }
+        // Step 3: Depth-first traversal
+        Console.WriteLine("\n=== Depth-First Traversal ===");
+        InteropCSharp.DepthFirstTraversal(tree,
+            val => Console.WriteLine($"Entering: {val}"),
+            val => Console.WriteLine($"Leaving : {val}")
+        );
 
-    static void PrintTree<T>(InteropTree<T> tree, int level)
-    {
-        var value = tree.ValueOrDefault; // Use ValueOrDefault to get the value or default
-        if (value == null)
-        {
-            Console.WriteLine(new string(' ', level * 2) + "@");
-        }
-        else
-        {
-            Console.WriteLine(new string(' ', level * 2) + value);
-        }
-
-        foreach (var child in tree.Children)
-        {
-            PrintTree(child, level + 1);
-        }
+        // Step 4: Traverse with outline index (e.g., [1,2,1])
+        Console.WriteLine("\n=== Traverse With Outline Index ===");
+        InteropCSharp.TraverseWithOutlineIndex(tree,
+            (label, index) =>
+                Console.WriteLine($"Label: {label}, Index: [{string.Join(", ", index)}]"));
     }
 }

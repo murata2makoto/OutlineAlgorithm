@@ -1,4 +1,4 @@
-﻿module OutlineAlgorithm.TreeAndHedge
+﻿module internal OutlineAlgorithm.TreeAndHedge
 
 /// <summary>
 /// Represents a tree structure where each node contains an optional value and a sequence of child trees (hedge).

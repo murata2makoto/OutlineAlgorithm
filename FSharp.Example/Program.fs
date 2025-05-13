@@ -3,10 +3,11 @@ open OutlineAlgorithm.Interop
 
 [<EntryPoint>]
 let main argv =
-    // Input sequence
-    let input = ["H1"; "H2"; "H5"; "H3"; "H6"]
 
-    // Rank function
+    /// Input outline headings
+    let input = ["H1"; "H2"; "H4"; "H3"; "H5"; "H3"; "H5"]
+
+    /// Rank function that assigns numeric depth based on the heading level
     let getRank (element: string) =
         match element with
         | "H1" -> 1
@@ -17,26 +18,23 @@ let main argv =
         | "H6" -> 6
         | _ -> 0
 
-    // Convert F# function to System.Func
-    let rankFunc = Func<string, int>(getRank)
+    /// Step 1: Convert input sequence to tokens with parentheses
+    let tokens = InteropFSharp.createTokenOrParenthesisSeq input getRank
+    printfn "=== Tokens ==="
+    tokens |> Seq.iter (printfn "%A")
 
-    // Generate token and parenthesis sequence using Interop
-    let tokenSeq = Interop.CreateTokenOrParenthesisSeq(input, rankFunc)
+    /// Step 2: Parse tokens into tree structure
+    let tree = InteropFSharp.parseToTree tokens
 
-    // Parse to tree using Interop
-    let trees = Interop.ParseToTree(tokenSeq)
+    /// Step 3: Traverse the tree using depth-first strategy
+    printfn "\n=== Depth-First Traversal ==="
+    InteropFSharp.depthFirstTraversal tree
+        (fun x -> printfn "Entering: %s" x)
+        (fun x -> printfn "Leaving : %s" x)
 
-    // Print each tree in the sequence
-    let rec printTree (tree: InteropTree<string>) (level: int) =
-        match tree.Value with
-        | None ->
-            printfn "%s@" (String.replicate (level * 2) " ")
-        | Some(v)  ->
-            printfn "%s%s" (String.replicate (level * 2) " ") v
-        for child in tree.Children do
-            printTree child (level + 1)
+    /// Step 4: Traverse the tree and print outline indices (e.g., [1; 2; 1])
+    printfn "\n=== Traverse with Outline Index ==="
+    InteropFSharp.traverseWithOutlineIndex tree
+        (fun x idx -> printfn "Label: %s, Index: %A" x idx)
 
-    for tree in trees do
-        printTree tree 0
-
-    0 // Return an integer exit code
+    0   

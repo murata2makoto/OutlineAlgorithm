@@ -1,4 +1,4 @@
-﻿module OutlineAlgorithm.CreateHedge
+﻿module internal OutlineAlgorithm.CreateHedge
 
 open TokenOrParenthesis
 open TreeAndHedge
@@ -28,7 +28,7 @@ let rec nest (l:seq<TokenOrParenthesis<'a>>):
     | DummyToken ->
         let content, remainder =  sequence2Hedge tail
         Node (None,content), remainder
-    | _ -> failwith "hen"
+    | _ -> failwith "shouldn't happen"
 
 /// <summary>
 /// Processes a sequence of tokens and parentheses to construct a hedge (a sequence of trees).
