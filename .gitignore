@@ -361,3 +361,11 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/tmp/watch
+/output
+/.config
+/.fsdocs
+/OutlineAlgorithm/docs/index.fsx.backup
+/OutlineAlgorithm/tmp/watch
+/OutlineAlgorithm/output
+/OutlineAlgorithm/fsdocs.toml.backup

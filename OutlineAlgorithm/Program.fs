@@ -3,7 +3,6 @@ open TokenOrParenthesis
 open CreateTokenOrParenthesisSeq
 open TreeAndHedge
 open CreateHedge
-open OutlineIndex
       
 [<EntryPoint>]
 let main argv =
