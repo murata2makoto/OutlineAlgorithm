@@ -199,6 +199,10 @@ This project is written in F#. To set it up, follow these steps:
 
 2. Restore dependencies (requires .NET SDK):
 
+## API documentation
+
+See [OutlineAlgorithm](https://murata2makoto.github.io/OutlineAlgorithm/).
+
 ## Contributing
 
 Contributions are welcome! If you encounter any issues or have feature requests, please open an [issue](https://github.com/murata2makoto/OutlineAlgorithm/issues). Pull requests are also appreciated.
