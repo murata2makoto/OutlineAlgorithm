@@ -19,7 +19,7 @@ Whether you're working in F# or C#, OutlineAlgorithm provides a straightforward 
 
 The input sequence of headings is first converted into a sequence of **tokens and parentheses**. This intermediate representation captures the nesting structure of the headings in a way that simplifies subsequent tree construction.
 
-Crucially, the process always begins by implicitly inserting a **`StartParenthesis` followed by a `DummyToken`**. This initial `DummyToken` acts as the **conceptual root** for the entire document, ensuring that even if the input starts with an `H1` (or multiple `H1`s appear), there's a single, consistent top-level node for the tree.
+Crucially, the process always begins by implicitly inserting a **`StartParenthesis` followed by a `DummyToken`**. This initial `DummyToken` acts as the **conceptual root** for the entire document, ensuring that even if the input contains multiple `H1`s, there's a single, consistent top-level node for the tree.
 
 Furthermore, when the nesting level of headings jumps unexpectedly (e.g., from `H1` to `H3` skipping `H2`), additional **`DummyToken`s are implicitly inserted** to represent the skipped intermediate levels. These `DummyToken`s, whether for the root or for skipped levels, are treated identically in the subsequent tree construction phase.
 
