@@ -1,4 +1,4 @@
-﻿module OutlineAlgorithm.TokenOrParenthesis
+﻿module internal OutlineAlgorithm.TokenOrParenthesis
 
 /// <summary>
 /// Represents a token or a parenthesis in a sequence, used for outlining or parsing operations.

@@ -1,13 +1,13 @@
 ﻿using OutlineAlgorithm.Interop;
-using System;
-using System.Collections.Generic;
+using System.Text.Json;
+
 
 class Program
 {
     static void Main()
     {
         // Input outline headings
-        var input = new List<string> { "H1", "H2", "H4", "H3", "H5", "H3", "H5" };
+        var input = new List<string> { "H1", "H2", "H4", "H3", "H5", "H1", "H4", "H3" };
 
         // Rank function mapping heading to numeric depth
         int GetRank(string h) => h switch
@@ -21,23 +21,19 @@ class Program
             _ => 0
         };
 
+        Console.WriteLine(JsonSerializer.Serialize(input));
+
         // Step 1: Convert input to token stream
-        var tokens = InteropCSharp.CreateTokenOrParenthesisSeq(input, new Func<string, int>(GetRank));
-        Console.WriteLine("=== Tokens ===");
-        foreach (var token in tokens)
-            Console.WriteLine($"{token}");
+        var tree = InteropCSharp.CreateTree(input, new Func<string, int>(GetRank));
 
-        // Step 2: Parse tokens into tree structure
-        var tree = InteropCSharp.ParseToTree(tokens);
-
-        // Step 3: Depth-first traversal
+        // Step 2: Depth-first traversal
         Console.WriteLine("\n=== Depth-First Traversal ===");
         InteropCSharp.DepthFirstTraversal(tree,
             val => Console.WriteLine($"Entering: {val}"),
             val => Console.WriteLine($"Leaving : {val}")
         );
 
-        // Step 4: Traverse with outline index (e.g., [1,2,1])
+        // Step 3: Traverse with outline index (e.g., [1,2,1])
         Console.WriteLine("\n=== Traverse With Outline Index ===");
         InteropCSharp.TraverseWithOutlineIndex(tree,
             (label, index) =>

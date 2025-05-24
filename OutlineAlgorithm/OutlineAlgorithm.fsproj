@@ -3,7 +3,16 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Authors>MURATA Makoto</Authors>
+    <PackageId>OutlineAlgorithm</PackageId>
+    <Version>1.1.0</Version>
+    <Description>A library to process a sequence of headings (e.g., h1, h2, h3) with explicit nesting levels into a hierarchical tree structure.</Description>
+    <PackageProjectUrl>https://github.com/murata2makoto/OutlineAlgorithm</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IsPackable>true</IsPackable>
     <NoWarn>1591</NoWarn>
 
     <FsDocsLicenseLink>https://opensource.org/licenses/MIT</FsDocsLicenseLink>
@@ -11,10 +20,8 @@
     <RepositoryUrl>https://github.com/murata2makoto/OutlineAlgorithm</RepositoryUrl>
     <RepositoryBranch>...</RepositoryBranch>
     <RepositoryType>git</RepositoryType>
-
-	<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-
-	  <FsDocsBaseUrl>/</FsDocsBaseUrl>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+    <FsDocsBaseUrl>/</FsDocsBaseUrl>
   </PropertyGroup>
 
 
@@ -24,5 +31,6 @@
     <Compile Include="CreateTokenOrParenthesisSeq.fs" />
     <Compile Include="CreateHedge.fs" />
     <Compile Include="Interop.fs" />
+    <None Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 </Project>

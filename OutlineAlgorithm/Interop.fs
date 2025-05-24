@@ -107,7 +107,7 @@ module internal InteropTraversalImpl =
 module InteropFSharp =
 
     /// <summary>
-    /// Performs depth-first traversal of an InteropTree. Only nodes with values are visited.
+    /// Performs depth-first traversal of an InteropTree. Only nodes with values are visited.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="onEnter">Function to call when entering a node with a value.</param>
@@ -116,7 +116,7 @@ module InteropFSharp =
         InteropTraversalImpl.depthFirst tree onEnter onExit
 
     /// <summary>
-    /// Performs breadth-first traversal of an InteropTree. Only nodes with values are visited.
+    /// Performs breadth-first traversal of an InteropTree. Only nodes with values are visited.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="onEnter">Function to call when entering a node with a value.</param>
@@ -125,7 +125,7 @@ module InteropFSharp =
         InteropTraversalImpl.breadthFirst tree onEnter onExit
 
     /// <summary>
-    /// Traverses the tree and applies the function to each node with a value, passing its outline index.
+    /// Traverses the tree and applies the function to each node with a value, passing its outline index.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="action">Function to call with each node's value and outline index (e.g., [1; 2; 3]).</param>
@@ -133,21 +133,14 @@ module InteropFSharp =
         InteropTraversalImpl.traverseWithOutlineIndex tree action []
 
     /// <summary>
-    /// Converts a sequence of elements into a token stream using a rank function.
+    /// Converts a sequence of elements and rank function into an InteropTree structure.
     /// </summary>
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A function that returns the rank (nesting level) of each element.</param>
-    /// <returns>A sequence of TokenOrParenthesis representing the structure.</returns>
-    let createTokenOrParenthesisSeq elements getRank =
+    /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
+    let CreateTree elements getRank =
         InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank
-
-    /// <summary>
-    /// Parses a token sequence into an InteropTree.
-    /// </summary>
-    /// <param name="tokens">The sequence of tokens and parentheses to parse.</param>
-    /// <returns>An InteropTree representing the hierarchical structure.</returns>
-    let parseToTree tokens =
-        InteropTraversalImpl.parseToTree tokens
+        |> InteropTraversalImpl.parseToTree 
 
 /// <summary>
 /// C#-friendly API using .NET delegate types and standard collections.
@@ -156,7 +149,7 @@ type InteropCSharp =
 
     /// <summary>
     /// Performs depth-first traversal using Action delegates.
-    /// Only nodes with values are visited.
+    /// Only nodes with values are visited.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="onEnter">Action to invoke when entering a node with a value.</param>
@@ -166,7 +159,7 @@ type InteropCSharp =
 
     /// <summary>
     /// Performs breadth-first traversal using Action delegates.
-    /// Only nodes with values are visited.
+    /// Only nodes with values are visited.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="onEnter">Action to invoke when entering a node with a value.</param>
@@ -175,7 +168,7 @@ type InteropCSharp =
         InteropTraversalImpl.breadthFirst tree (fun x -> onEnter.Invoke(x)) (fun x -> onExit.Invoke(x))
 
     /// <summary>
-    /// Traverses the tree and invokes the Action with outline index for each node with a value.
+    /// Traverses the tree and invokes the Action with outline index for each node with a value.  Dummy nodes are not visited.
     /// </summary>
     /// <param name="tree">The InteropTree to traverse.</param>
     /// <param name="action">Action to invoke with the node value and its outline index (e.g., [1, 2, 3]).</param>
@@ -184,19 +177,11 @@ type InteropCSharp =
         InteropTraversalImpl.traverseWithOutlineIndex tree adaptedAction []
 
     /// <summary>
-    /// Converts a sequence of elements and rank function into a flat array of tokens and parentheses.
+    /// Converts a sequence of elements and rank function into an InteropTree structure.
     /// </summary>
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element.</param>
-    /// <returns>An array of TokenOrParenthesis representing the hierarchical structure.</returns>
-    static member CreateTokenOrParenthesisSeq(elements: IEnumerable<'a>, getRank: Func<'a, int>) =
-        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements (fun e -> getRank.Invoke(e))
-        |> Seq.toArray
-
-    /// <summary>
-    /// Parses a sequence of TokenOrParenthesis elements into an InteropTree structure.
-    /// </summary>
-    /// <param name="tokens">The sequence of tokens and parentheses.</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    static member ParseToTree(tokens: IEnumerable<TokenOrParenthesis<'a>>) =
-        InteropTraversalImpl.parseToTree tokens
+    static member CreateTree(elements: IEnumerable<'a>, getRank: Func<'a, int>) =
+        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements (fun e -> getRank.Invoke(e))
+        |> InteropTraversalImpl.parseToTree 
