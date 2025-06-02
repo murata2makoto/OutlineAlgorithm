@@ -16,31 +16,46 @@ open TokenOrParenthesis
 /// with appropriate parentheses added based on the rank of each element.
 /// </returns>
 let createTokenOrParenthesisSeq 
-        (l: seq<'a>) (getRank: ('a -> int)) = 
-    seq{let mutable currentLevel = 0
+        (l: seq<'a>) (getRank: ('a -> int)) (getLayer: ('a -> int) ) = 
+    seq{let mutable currentLayer = 0
+        let rank = Array.init 100 (fun _ -> 0)
+        rank.[currentLayer] <- 0
         for e in l do
-          let nextLevel = getRank e
-          if nextLevel = currentLevel then
-            yield EndParenthesis
-            yield StartParenthesis
-            yield Token(e)
-          elif nextLevel > currentLevel then
-            /// <summary>
-            /// Handles cases where the level increases significantly (e.g., from H2 to H4).
-            /// For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
-            /// are generated to maintain the correct nesting structure.
-            /// </summary>
-            for i = 1 to nextLevel - currentLevel - 1 do
+          let nextRank = getRank e
+          let nextLayer = getLayer e
+          if currentLayer >= nextLayer then
+              for layer = currentLayer downto nextLayer + 1 do
+                for _ = 0 to rank.[layer] do
+                  yield EndParenthesis
+              if nextRank < rank.[currentLayer] then
+                for i = nextRank to rank.[currentLayer] do
+                  yield EndParenthesis
                 yield StartParenthesis
-                yield DummyToken
-            yield StartParenthesis
-            yield Token(e)
-          elif nextLevel < currentLevel then
-            for i = 0 to currentLevel - nextLevel do
-              yield EndParenthesis
-            yield StartParenthesis
+                yield Token(e)
+              elif nextRank > rank.[currentLayer] then
+                /// <summary>
+                /// Handles cases where the level increases significantly (e.g., from H2 to H4).
+                /// For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
+                /// are generated to maintain the correct nesting structure.
+                /// </summary>
+                for i = rank.[currentLayer] to nextRank - 1 do
+                    yield StartParenthesis
+                    yield DummyToken
+                yield StartParenthesis
+                yield Token(e)
+              else failwith "hen"
+          elif currentLayer < nextLayer then
+            for layer = currentLayer + 1 to nextLayer - 1 do
+                rank.[layer] <- 0
+            for _ = 1 to nextRank do
+              yield StartParenthesis
+              yield DummyToken
             yield Token(e)
           else failwith "hen"
-          currentLevel <- nextLevel;
-        for j = 1 to currentLevel do yield EndParenthesis
+          currentLayer <- nextLayer;
+          rank.[nextLayer] <- nextRank
+
+        for i = currentLayer downto 0 do
+          for k = 1 to rank.[i] do yield EndParenthesis
+
         }

@@ -8,6 +8,7 @@ class Program
     {
         // Input outline headings
         var input = new List<string> { "H1", "H2", "H4", "H3", "H5", "H1", "H4", "H3" };
+        var inputL = new List<string> { "H1", "H2", "P", "H4", "H3", "P", "H5", "P", "H1", "H4", "P", "H3" }; 
 
         // Rank function mapping heading to numeric depth
         int GetRank(string h) => h switch
@@ -18,13 +19,31 @@ class Program
             "H4" => 4,
             "H5" => 5,
             "H6" => 6,
+            "P"  => 1,
+            "UL" => 1,
+            _ => 0
+        };
+
+        // Layer function
+        int GetLayer(string h) => h switch
+        {
+            "H1" => 0,
+            "H2" => 0,
+            "H3" => 0,
+            "H4" => 0,
+            "H5" => 0,
+            "H6" => 0,
+            "P" =>  1,
+            "UL" => 1,
             _ => 0
         };
 
         Console.WriteLine(JsonSerializer.Serialize(input));
 
         // Step 1: Convert input to token stream
-        var tree = InteropCSharp.CreateTree(input, new Func<string, int>(GetRank));
+        var r = new Func<string, int>(GetRank);
+        var l = new Func<string, int>(GetLayer);
+        var tree = InteropCSharp.CreateTreeLayered(input, r, l);
 
         // Step 2: Depth-first traversal
         Console.WriteLine("\n=== Depth-First Traversal ===");
