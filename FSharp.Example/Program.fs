@@ -7,7 +7,8 @@ let main argv =
     /// Input outline headings
     let input = ["H1"; "H2"; "H4"; "H3"; "H5"; "H1"; "H4"; "H3"]
     let inputL = ["H1"; "H2"; "P"; "H4"; "H3"; "P"; "H5"; "P"; "H1"; "H4"; "P"; "H3"]
-    let inputL = ["H1"; "H2"]
+    let inputL = ["H1"; "P"; "P2"; "P"; "P2"; "P"; "H1"]
+    let inputL = ["H1";"P";"H2";"P";"H3";"H2";"P"; "P2";"H3"]
 
     /// Rank function that assigns numeric depth based on the heading level
     let getRank (element: string) =
@@ -19,6 +20,7 @@ let main argv =
         | "H5" -> 5
         | "H6" -> 6
         | "P"  -> 1
+        | "P2"  -> 2
         | "UL" -> 1
         | _ -> 0
 
@@ -32,6 +34,7 @@ let main argv =
         | "H5" -> 0
         | "H6" -> 0
         | "P"  -> 1
+        | "P2"  -> 1
         | "UL" -> 1
         | _ -> 0
 
@@ -40,7 +43,7 @@ let main argv =
 
     /// Step 1: Convert input sequence to tokens with parentheses
     //let tree = InteropFSharp.CreateTree input getRank
-    let treeL = InteropFSharp.CreateTreeLayered inputL getRank getLayer
+    let treeL = InteropFSharp.CreateTreeWithRanksAndLayers inputL getRank getLayer
 
     /// Step 2: Traverse the tree using depth-first strategy
     (*

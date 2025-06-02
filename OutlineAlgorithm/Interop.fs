@@ -86,10 +86,7 @@ module internal InteropTraversalImpl =
     /// <param name="getRank">Function that returns the rank (nesting level) of an element.</param>
     /// <returns>An array of TokenOrParenthesis representing the structure.</returns>
     let createTokenOrParenthesisSeqFromSeq (elements: seq<'a>) (getRank: 'a -> int) (getLayer: 'a -> int) : seq<TokenOrParenthesis<'a>> =
-        let sq = createTokenOrParenthesisSeq elements getRank getLayer
-        for tkn in sq do
-            printfn "%A" tkn
-        sq
+        createTokenOrParenthesisSeq elements getRank getLayer
          
 
     /// <summary>
@@ -143,7 +140,7 @@ module InteropFSharp =
     /// <param name="getRank">A function that returns the rank (nesting level) of each element.</param>
     /// <param name="getLayer">A function that returns the layer of each element.</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    let CreateTreeLayered elements getRank getLayer =
+    let CreateTreeWithRanksAndLayers elements getRank getLayer =
         InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank getLayer
         |> InteropTraversalImpl.parseToTree 
 
@@ -199,7 +196,7 @@ type InteropCSharp =
     /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element.</param>
     /// <param name="getLayer">A Func delegate returning the layer of each element.</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    static member CreateTreeLayered(elements: IEnumerable<'a>, getRank: Func<'a, int>, getLayer: Func<'a, int>) =
+    static member CreateTreeWithRanksAndLayers(elements: IEnumerable<'a>, getRank: Func<'a, int>, getLayer: Func<'a, int>) =
         InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq 
             elements 
             (fun e -> getRank.Invoke(e)) 

@@ -25,9 +25,9 @@ let createTokenOrParenthesisSeq
           let nextLayer = getLayer e
           if currentLayer >= nextLayer then
               for layer = currentLayer downto nextLayer + 1 do
-                for _ = 0 to rank.[layer] do
+                for _ = 1 to rank.[layer] do
                   yield EndParenthesis
-              if nextRank < rank.[currentLayer] then
+              if nextRank <= rank.[currentLayer] then
                 for i = nextRank to rank.[currentLayer] do
                   yield EndParenthesis
                 yield StartParenthesis
@@ -38,7 +38,7 @@ let createTokenOrParenthesisSeq
                 /// For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
                 /// are generated to maintain the correct nesting structure.
                 /// </summary>
-                for i = rank.[currentLayer] to nextRank - 1 do
+                for i = rank.[nextLayer] + 1 to nextRank - 1 do
                     yield StartParenthesis
                     yield DummyToken
                 yield StartParenthesis
@@ -47,9 +47,10 @@ let createTokenOrParenthesisSeq
           elif currentLayer < nextLayer then
             for layer = currentLayer + 1 to nextLayer - 1 do
                 rank.[layer] <- 0
-            for _ = 1 to nextRank do
+            for _ = 1 to nextRank - 1 do
               yield StartParenthesis
               yield DummyToken
+            yield StartParenthesis
             yield Token(e)
           else failwith "hen"
           currentLayer <- nextLayer;
