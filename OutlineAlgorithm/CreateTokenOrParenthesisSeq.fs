@@ -17,30 +17,27 @@ open TokenOrParenthesis
 /// </returns>
 let createTokenOrParenthesisSeq 
         (l: seq<'a>) (getRank: ('a -> int)) = 
-    seq{let mutable currentLevel = 0
+    seq{let mutable currentRank = 0
         for e in l do
-          let nextLevel = getRank e
-          if nextLevel = currentLevel then
-            yield EndParenthesis
+          let nextRank = getRank e
+          
+          if nextRank <= currentRank then
+            for i = nextRank to currentRank do
+              yield EndParenthesis
             yield StartParenthesis
             yield Token(e)
-          elif nextLevel > currentLevel then
+          elif nextRank > currentRank then
             /// <summary>
             /// Handles cases where the level increases significantly (e.g., from H2 to H4).
             /// For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
             /// are generated to maintain the correct nesting structure.
             /// </summary>
-            for i = 1 to nextLevel - currentLevel - 1 do
+            for i = currentRank + 1 to nextRank - 1 do
                 yield StartParenthesis
                 yield DummyToken
             yield StartParenthesis
             yield Token(e)
-          elif nextLevel < currentLevel then
-            for i = 0 to currentLevel - nextLevel do
-              yield EndParenthesis
-            yield StartParenthesis
-            yield Token(e)
           else failwith "hen"
-          currentLevel <- nextLevel;
-        for j = 1 to currentLevel do yield EndParenthesis
+          currentRank <- nextRank;
+        for j = 1 to currentRank do yield EndParenthesis
         }
