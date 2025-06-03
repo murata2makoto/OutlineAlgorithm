@@ -1,5 +1,6 @@
 ﻿using OutlineAlgorithm.Interop;
 using System.Text.Json;
+using System.Xml.Linq;
 
 
 class Program
@@ -7,8 +8,13 @@ class Program
     static void Main()
     {
         // Input outline headings
-        var input = new List<string> { "H1", "H2", "H4", "H3", "H5", "H1", "H4", "H3" };
-        var inputL = new List<string> { "H1", "H2", "P", "H4", "H3", "P", "H5", "P", "H1", "H4", "P", "H3" }; 
+        var input1 = new List<string> { "H1", "H2", "H4", "H3", "H5", "H1", "H4", "H3" };
+        var input2 = new List<string> { "H1", "H2", "P", "H4", "H3", "P", "H5", "P", "H1", "H4", "P", "H3" };
+        var input3 = new List<string> {"H1", "P", "H2", "P", "H2", "P", "H3"};
+        var input4 = new List<string> {"H1","P", "H3","P","H3","H2","P", "P2","H3"};
+        var input5 = new List<string> {"H1", "P", "H2", "P", "H2"};
+        var input6 = new List<string> {"H1", "P", "H2", "P", "H2", "UL", "LI", "LI2", "LI2", "LI", "LI2", "LI3", "P" };
+        var input = input6;
 
         // Rank function mapping heading to numeric depth
         int GetRank(string h) => h switch
@@ -20,8 +26,12 @@ class Program
             "H5" => 5,
             "H6" => 6,
             "P"  => 1,
+            "P2" => 2,
             "UL" => 1,
-            _ => 0
+            "LI" => 2,
+            "LI2"=> 3,
+            "LI3"=> 4,
+            _ => throw new ArgumentException("undefined", h)
         };
 
         // Layer function
@@ -33,9 +43,13 @@ class Program
             "H4" => 0,
             "H5" => 0,
             "H6" => 0,
-            "P" =>  1,
+            "P"  => 1,
+            "P2" => 1,
             "UL" => 1,
-            _ => 0
+            "LI" => 1,
+            "LI2"=> 1,
+            "LI3"=> 1,
+            _ => throw new ArgumentException("undefined", h)
         };
 
         Console.WriteLine(JsonSerializer.Serialize(input));
