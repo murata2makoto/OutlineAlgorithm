@@ -15,8 +15,9 @@ open TokenOrParenthesis
 /// A sequence of <see cref="TokenOrParenthesis"/> values representing the input sequence
 /// with appropriate parentheses added based on the rank of each element.
 /// </returns>
-let createTokenOrParenthesisSeq 
-        (l: seq<'a>) (getRank: ('a -> int)) (getLayer: ('a -> int) ) = 
+let createTokenOrParenthesisSeq
+        (l: seq<'a>) (getRank: ('a -> int)) (getLayer: ('a -> int) ) (debug: bool) = 
+
     seq{let mutable currentLayer = 0
         let rank = Array.init 100 (fun _ -> 0)
         rank.[currentLayer] <- 0
@@ -26,12 +27,13 @@ let createTokenOrParenthesisSeq
           if currentLayer >= nextLayer then
               for layer = currentLayer downto nextLayer + 1 do
                 for _ = 1 to rank.[layer] do
-                  yield EndParenthesis
-              if nextRank <= rank.[currentLayer] then
-                for i = nextRank to rank.[currentLayer] do
-                  yield EndParenthesis
-                yield StartParenthesis
-                yield Token(e)
+                  yield (TokenOrParenthesis<'a>.CreateEndParenthesis layer debug) 
+                rank.[layer] <- 0
+              if nextRank <= rank.[nextLayer] then
+                for i = nextRank to rank.[nextLayer] do
+                  yield (TokenOrParenthesis<'a>.CreateEndParenthesis currentLayer debug) 
+                yield (TokenOrParenthesis<'a>.CreateStartParenthesis currentLayer debug) 
+                yield (TokenOrParenthesis<'a>.CreateToken e currentLayer debug)
               elif nextRank > rank.[currentLayer] then
                 /// <summary>
                 /// Handles cases where the level increases significantly (e.g., from H2 to H4).
@@ -39,24 +41,25 @@ let createTokenOrParenthesisSeq
                 /// are generated to maintain the correct nesting structure.
                 /// </summary>
                 for i = rank.[nextLayer] + 1 to nextRank - 1 do
-                    yield StartParenthesis
-                    yield DummyToken
-                yield StartParenthesis
-                yield Token(e)
+                    yield (TokenOrParenthesis<'a>.CreateStartParenthesis nextLayer debug);
+                    yield (TokenOrParenthesis<'a>.CreateDummyToken nextLayer debug);
+                yield (TokenOrParenthesis<'a>.CreateStartParenthesis nextLayer debug); 
+                yield (TokenOrParenthesis<'a>.CreateToken e nextLayer debug)
               else failwith "hen"
           elif currentLayer < nextLayer then
             for layer = currentLayer + 1 to nextLayer - 1 do
                 rank.[layer] <- 0
             for _ = 1 to nextRank - 1 do
-              yield StartParenthesis
-              yield DummyToken
-            yield StartParenthesis
-            yield Token(e)
+              yield (TokenOrParenthesis<'a>.CreateStartParenthesis nextLayer debug);
+              yield (TokenOrParenthesis<'a>.CreateDummyToken nextLayer debug);
+            yield (TokenOrParenthesis<'a>.CreateStartParenthesis nextLayer debug);
+            yield (TokenOrParenthesis<'a>.CreateToken e nextLayer debug);
           else failwith "hen"
           currentLayer <- nextLayer;
           rank.[nextLayer] <- nextRank
 
         for i = currentLayer downto 0 do
-          for k = 1 to rank.[i] do yield EndParenthesis
+          for k = 1 to rank.[i] do 
+            yield (TokenOrParenthesis<'a>.CreateEndParenthesis i debug)
 
-        }
+        } |> Seq.toList |> Seq.ofList

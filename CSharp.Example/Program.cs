@@ -43,7 +43,7 @@ class Program
         // Step 1: Convert input to token stream
         var r = new Func<string, int>(GetRank);
         var l = new Func<string, int>(GetLayer);
-        var tree = InteropCSharp.CreateTreeLayered(input, r, l);
+        var tree = InteropCSharp.CreateTreeWithRanksAndLayers(input, r, l, false);
 
         // Step 2: Depth-first traversal
         Console.WriteLine("\n=== Depth-First Traversal ===");
