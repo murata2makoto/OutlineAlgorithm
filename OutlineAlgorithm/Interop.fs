@@ -94,7 +94,8 @@ module internal InteropTraversalImpl =
     /// <param name="tokens">The token sequence to parse.</param>
     /// <returns>An InteropTree representing the hierarchical structure.</returns>
     let parseToTree (tokens: seq<TokenOrParenthesis<'a>>) =
-        let hedge, _ = sequence2Hedge tokens
+        use en = tokens.GetEnumerator()
+        let hedge = sequence2Hedge en
         let rec convertTree (tree: Tree<'a>) =
             match tree with
             | Node(value, children) ->

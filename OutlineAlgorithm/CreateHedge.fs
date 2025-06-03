@@ -2,6 +2,7 @@
 
 open TokenOrParenthesis
 open TreeAndHedge
+open System.Collections.Generic
 
 /// <summary>
 /// Recursively processes a sequence of tokens and parentheses to construct a tree structure.
@@ -17,18 +18,20 @@ open TreeAndHedge
 /// <item>The remaining sequence of <see cref="TokenOrParenthesis"/> values after processing.</item>
 /// </list>
 /// </returns>
-let rec nest (l:seq<TokenOrParenthesis<'a>>): 
-        Tree<'a> * seq<TokenOrParenthesis<'a>> =
+let rec nest (en: IEnumerator<TokenOrParenthesis<'a>>) : Tree<'a> =
+    if not (en.MoveNext()) then
+        failwith "Unexpected end of input in nest"
 
-    let head, tail = Seq.head l, Seq.tail l
-    match head with 
-    | Token(e) ->
-        let content, remainder =  sequence2Hedge tail
-        Node (Some(e),content), remainder
-    | DummyToken ->
-        let content, remainder =  sequence2Hedge tail
-        Node (None,content), remainder
-    | _ -> failwith "shouldn't happen"
+    match en.Current with
+    | Token(e, _) ->
+        let children = sequence2Hedge en
+        Node(Some e, children)
+    | DummyToken(_) ->
+        let children = sequence2Hedge en
+        Node(None, children)
+    | _ ->
+        failwithf "Unexpected token in nest: %A" en.Current
+
 
 /// <summary>
 /// Processes a sequence of tokens and parentheses to construct a hedge (a sequence of trees).
@@ -44,22 +47,16 @@ let rec nest (l:seq<TokenOrParenthesis<'a>>):
 /// <item>The remaining sequence of <see cref="TokenOrParenthesis"/> values after processing.</item>
 /// </list>
 /// </returns>
-and sequence2Hedge (l:seq<TokenOrParenthesis<'a>>):
-        Hedge<'a> * seq<TokenOrParenthesis<'a>> =
-
-    if Seq.isEmpty l then
-        Seq.empty, l
-    else
-        let head, tail = Seq.head l, Seq.tail l
-        match head with
-        | Token(_) | DummyToken ->
-            failwith "Should not happen"
-        | EndParenthesis -> 
-            Seq.empty, tail
-        | StartParenthesis -> 
-            let subtree, remainder = nest tail
-            let rest, remainder = sequence2Hedge remainder
-            Seq.append (seq{subtree}) rest,
-            remainder
-
+and sequence2Hedge (en: IEnumerator<TokenOrParenthesis<'a>>) : Hedge<'a> =
+    [
+        let mutable done_ = false
+        while not done_ && en.MoveNext() do
+            match en.Current with
+            | StartParenthesis(_) ->
+                yield nest en
+            | EndParenthesis(_) ->
+                done_ <- true
+            | _ ->
+                failwithf "Unexpected token in sequence2Hedge: %A" en.Current
+    ]
 
