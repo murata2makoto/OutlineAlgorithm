@@ -23,10 +23,10 @@ let rec nest (en: IEnumerator<TokenOrParenthesis<'a>>) : Tree<'a> =
         failwith "Unexpected end of input in nest"
 
     match en.Current with
-    | Token(e, _) ->
+    | Token(e) ->
         let children = sequence2Hedge en
         Node(Some e, children)
-    | DummyToken(_) ->
+    | DummyToken ->
         let children = sequence2Hedge en
         Node(None, children)
     | _ ->
@@ -52,9 +52,9 @@ and sequence2Hedge (en: IEnumerator<TokenOrParenthesis<'a>>) : Hedge<'a> =
         let mutable done_ = false
         while not done_ && en.MoveNext() do
             match en.Current with
-            | StartParenthesis(_) ->
+            | StartParenthesis ->
                 yield nest en
-            | EndParenthesis(_) ->
+            | EndParenthesis ->
                 done_ <- true
             | _ ->
                 failwithf "Unexpected token in sequence2Hedge: %A" en.Current
