@@ -14,11 +14,7 @@ type InteropTree<'a>(value: 'a option, children: seq<InteropTree<'a>>) =
     /// <summary>Gets the optional value of this node.</summary>
     member _.Value = value
 
-    /// <summary>
-    /// Gets the child nodes of this tree node.
-    /// The returned sequence is fully evaluated and safe to enumerate multiple times.
-    /// It does not rely on deferred execution or lazy evaluation.
-    /// </summary>
+    /// <summary>Gets the child nodes of this tree node as a fully evaluated sequence, safe to enumerate multiple times without deferred execution.</summary>
     member _.Children = children
 
     /// <summary>Gets the contained value if present, otherwise returns the default value of type 'a.</summary>
