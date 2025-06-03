@@ -16,4 +16,4 @@ type Tree<'a> =
 /// Represents a hedge, which is a sequence of trees.
 /// </summary>
 /// <typeparam name="T">The type of the value stored in the tree nodes within the hedge.</typeparam>
-and Hedge<'a> = Tree<'a> seq
+and Hedge<'a> = Tree<'a> list

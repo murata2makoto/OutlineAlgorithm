@@ -85,8 +85,8 @@ module internal InteropTraversalImpl =
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">Function that returns the rank (nesting level) of an element.</param>
     /// <returns>An array of TokenOrParenthesis representing the structure.</returns>
-    let createTokenOrParenthesisSeqFromSeq (elements: seq<'a>) (getRank: 'a -> int) (getLayer: 'a -> int) : seq<TokenOrParenthesis<'a>> =
-        createTokenOrParenthesisSeq elements getRank getLayer
+    let createTokenOrParenthesisSeqFromSeq (elements: seq<'a>) (getRank: 'a -> int) (getLayer: 'a -> int) (debug: bool): seq<TokenOrParenthesis<'a>> =
+        createTokenOrParenthesisSeq elements getRank getLayer debug
          
 
     /// <summary>
@@ -95,7 +95,8 @@ module internal InteropTraversalImpl =
     /// <param name="tokens">The token sequence to parse.</param>
     /// <returns>An InteropTree representing the hierarchical structure.</returns>
     let parseToTree (tokens: seq<TokenOrParenthesis<'a>>) =
-        let hedge, _ = sequence2Hedge tokens
+        use en = tokens.GetEnumerator()
+        let hedge = sequence2Hedge en
         let rec convertTree (tree: Tree<'a>) =
             match tree with
             | Node(value, children) ->
@@ -139,9 +140,10 @@ module InteropFSharp =
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A function that returns the rank (nesting level) of each element.</param>
     /// <param name="getLayer">A function that returns the layer of each element.</param>
+    /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    let CreateTreeWithRanksAndLayers elements getRank getLayer =
-        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank getLayer
+    let CreateTreeWithRanksAndLayers elements getRank getLayer debug =
+        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank getLayer debug
         |> InteropTraversalImpl.parseToTree 
 
     /// <summary>
@@ -150,10 +152,11 @@ module InteropFSharp =
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A function that returns the rank (nesting level) of each element.</param>
     /// <param name="getLayer">A function that returns the layer of each element.</param>
+    /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    let CreateTree elements getRank =
-        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank (fun _ -> 0)
-        |> InteropTraversalImpl.parseToTree 
+    let CreateTree elements getRank debug =
+        InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq elements getRank (fun _ -> 0) debug
+        |> InteropTraversalImpl.parseToTree
 
 /// <summary>
 /// C#-friendly API using .NET delegate types and standard collections.
@@ -195,12 +198,14 @@ type InteropCSharp =
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element.</param>
     /// <param name="getLayer">A Func delegate returning the layer of each element.</param>
+    /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    static member CreateTreeWithRanksAndLayers(elements: IEnumerable<'a>, getRank: Func<'a, int>, getLayer: Func<'a, int>) =
+    static member CreateTreeWithRanksAndLayers(elements: IEnumerable<'a>, getRank: Func<'a, int>, getLayer: Func<'a, int>) debug =
         InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq 
             elements 
             (fun e -> getRank.Invoke(e)) 
             (fun e -> getLayer.Invoke(e))
+            debug
         |> InteropTraversalImpl.parseToTree 
 
     /// <summary>
@@ -208,10 +213,12 @@ type InteropCSharp =
     /// </summary>
     /// <param name="elements">The sequence of elements to convert.</param>
     /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element.</param>
+    /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
-    static member CreateTree(elements: IEnumerable<'a>, getRank: Func<'a, int>) =
+    static member CreateTree(elements: IEnumerable<'a>, getRank: Func<'a, int>) debug =
         InteropTraversalImpl.createTokenOrParenthesisSeqFromSeq 
             elements 
             (fun e -> getRank.Invoke(e)) 
             (fun e -> 0)
+            debug
         |> InteropTraversalImpl.parseToTree 
