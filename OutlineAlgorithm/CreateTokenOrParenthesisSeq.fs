@@ -62,4 +62,4 @@ let createTokenOrParenthesisSeq
           for k = 1 to rank.[i] do 
             yield (TokenOrParenthesis<'a>.CreateEndParenthesis i debug)
 
-        } |> Seq.toList |> Seq.ofList
+        } 
