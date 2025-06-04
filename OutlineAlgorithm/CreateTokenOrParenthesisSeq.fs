@@ -35,11 +35,9 @@ let createTokenOrParenthesisSeq
                 yield (TokenOrParenthesis<'a>.CreateStartParenthesis currentLayer debug) 
                 yield (TokenOrParenthesis<'a>.CreateToken e currentLayer debug)
               elif nextRank > rank.[currentLayer] then
-                /// <summary>
-                /// Handles cases where the level increases significantly (e.g., from H2 to H4).
-                /// For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
-                /// are generated to maintain the correct nesting structure.
-                /// </summary>
+                // Handles cases where the level increases significantly (e.g., from H2 to H4).
+                // For each missing level, a <see cref="StartParenthesis"/> and a <see cref="DummyToken"/> 
+                // are generated to maintain the correct nesting structure.
                 for i = rank.[nextLayer] + 1 to nextRank - 1 do
                     yield (TokenOrParenthesis<'a>.CreateStartParenthesis nextLayer debug);
                     yield (TokenOrParenthesis<'a>.CreateDummyToken nextLayer debug);
