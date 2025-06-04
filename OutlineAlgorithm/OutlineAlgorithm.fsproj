@@ -7,7 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>MURATA Makoto</Authors>
     <PackageId>OutlineAlgorithm</PackageId>
-    <Version>1.1.0</Version>
+    <Version>1.1.1</Version>
     <Description>A library to process a sequence of headings (e.g., h1, h2, h3) with explicit nesting levels into a hierarchical tree structure.</Description>
     <PackageProjectUrl>https://github.com/murata2makoto/OutlineAlgorithm</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
