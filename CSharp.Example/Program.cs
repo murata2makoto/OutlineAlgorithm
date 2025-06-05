@@ -14,7 +14,9 @@ class Program
         var input4 = new List<string> {"H1","P", "H3","P","H3","H2","P", "P2","H3"};
         var input5 = new List<string> {"H1", "P", "H2", "P", "H2"};
         var input6 = new List<string> {"H1", "P", "H2", "P", "H2", "UL", "LI", "LI2", "LI2", "LI", "LI2", "LI3", "P" };
-        var input = input6;
+        var input7 = new List<string> {"P", "P", "P" };
+        var input8 = new List<string> { "P", "H1", "P", "P" };
+        var input = input8;
 
         // Rank function mapping heading to numeric depth
         int GetRank(string h) => h switch

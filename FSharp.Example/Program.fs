@@ -11,7 +11,8 @@ let main argv =
     let input4 = ["H1";"P";"H3";"P";"H3";"H2";"P"; "P2";"H3"]
     let input5 = ["H1"; "P"; "H2"; "P"; "H2"]
     let input6 = ["H1"; "P"; "H2"; "P"; "H2"; "UL"; "LI"; "LI2"; "LI2"; "LI"; "LI2";"LI3"; "P"]
-    let input = input6
+    let input7 = ["P"; "P";  "P"]
+    let input = input7
 
     /// Rank function that assigns numeric depth based on the heading level
     let getRank (element: string) =
