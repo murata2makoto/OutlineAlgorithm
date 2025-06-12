@@ -12,10 +12,11 @@ let main argv =
     let input5 = ["H1"; "P"; "H2"; "P"; "H2"]
     let input6 = ["H1"; "P"; "H2"; "P"; "H2"; "UL"; "LI"; "LI2"; "LI2"; "LI"; "LI2";"LI3"; "P"]
     let input7 = ["P"; "P";  "P"]
-    let input = input7
+    let input = input6
 
     /// Rank function that assigns numeric depth based on the heading level
     let getRank (element: string) =
+       let x = 
         match element with
         | "H1" -> 1
         | "H2" -> 2
@@ -30,12 +31,13 @@ let main argv =
         | "LI2" -> 3
         | "LI3" -> 4
         | _ -> failwith "undefined"
+       x 
 
     /// Layer function
     let getLayer(element: string) =
         match element with
-        | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" -> 0
-        | "P" | "P2"  | "UL" | "LI" | "LI2"| "LI3" -> 1
+        | "H1" | "H2" | "H3" | "H4" | "H5" | "H6" -> 1
+        | "P" | "P2"  | "UL" | "LI" | "LI2"| "LI3" -> 2
         | _ -> failwith "undefined"
 
     printfn "%A" input

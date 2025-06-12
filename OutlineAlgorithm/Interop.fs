@@ -138,7 +138,7 @@ module InteropFSharp =
     /// Converts a sequence of elements and rank function into an InteropTree structure.
     /// </summary>
     /// <param name="elements">The sequence of elements to convert.</param>
-    /// <param name="getRank">A function that returns the rank (nesting level) of each element.</param>
+    /// <param name="getRank">A function that returns the rank (nesting level) of each element. A rank is a natural number.</param>
     /// <param name="getLayer">A function that returns the layer of each element.</param>
     /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
@@ -196,7 +196,7 @@ type InteropCSharp =
     /// Converts a sequence of elements and rank function into an InteropTree structure.
     /// </summary>
     /// <param name="elements">The sequence of elements to convert.</param>
-    /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element.</param>
+    /// <param name="getRank">A Func delegate returning the nesting level (rank) of each element. A rank is a natural number.</param>
     /// <param name="getLayer">A Func delegate returning the layer of each element.</param>
     /// <param name="debug">A boolean value enabling debug print</param>
     /// <returns>An InteropTree representing the reconstructed hierarchy.</returns>
